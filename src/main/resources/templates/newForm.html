@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/admin/new}" th:object="${user}">
+  <label for="firstName">Enter name: </label>
+  <input type="text" th:field="*{firstName}" id="firstName">
+  <br/>
+  <label for="lastName">Enter last name: </label>
+  <input type="text" th:field="*{lastName}" id="lastName">
+  <br/>
+  <label for="email">Enter your e-mail: </label>
+  <input type="text" th:field="*{email}" id="email">
+  <br/>
+  <label for="password">Enter your password: </label>
+  <input type="text" th:field="*{password}" id="password">
+  <br/>
+  <p>
+    <label>Roles:
+      <input type="checkbox" name="roleSet"
+             th:each="role : ${roleSet}"
+             th:text="${role.getRole()}"
+             th:value="${role.getRole()}"
+             th:field="*{roles}"
+      />
+    </label>
+  </p>
+  <input type="submit" value="Add">
+  <br/>
+</form>
+<br>
+<a th:href="@{http://localhost:8080/admin}">Admin's page</a>
+<br>
+<a th:href="@{http://localhost:8080/logout}">Log Out</a>
+
+</body>
+</html>
