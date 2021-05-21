@@ -3,16 +3,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <title></title>
 </head>
 <body>
-<div>
-    <th:block th:each="us : ${users}">
-        <h2 th:text="${us.toString()}" ></h2>
-        <a th:href="@{/admin/delete/{id}(id=${us.getId()})}">Delete user</a>     /
-        <a th:href="@{/admin/update/{id}(id=${us.getId()})}">Update user</a>
-        <hr/>
-    </th:block>
+<div class="container-fluid">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="us : ${users}">
+            <td th:text="${us.getId()}" ></td>
+            <td th:text="${us.getFirstName()}" ></td>
+            <td th:text="${us.getLastName()}" ></td>
+            <td th:text="${us.getEmail()}" ></td>
+            <td th:text="${us.getRoles()}" ></td>
+            <td th:href="@{/admin/delete/{id}(id=${us.getId()})}">Edit</td>
+            <td th:href="@{/admin/update/{id}(id=${us.getId()})}">Delete</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 <br>
 <a th:href="@{http://localhost:8080/admin}">Admin's page</a>

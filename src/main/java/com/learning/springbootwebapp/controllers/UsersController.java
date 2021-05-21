@@ -3,10 +3,12 @@ package com.learning.springbootwebapp.controllers;
 import com.learning.springbootwebapp.model.Role;
 import com.learning.springbootwebapp.model.User;
 import com.learning.springbootwebapp.repository.UserRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.*;
 
 
@@ -19,7 +21,15 @@ public class UsersController {
     }
 
     @GetMapping("/admin")
-    public String asAdminStart() {
+    public String asAdminStart(UsernamePasswordAuthenticationToken principal, ModelMap model) {
+        List<User> users = userRepository.findAll();
+        String roles = principal.getAuthorities().toString().replaceAll("[]\\[]", "");
+        model.addAttribute("roles", roles);
+        model.addAttribute("email", principal.getName());
+        model.addAttribute("users", users);
+        model.addAttribute("user", new User());
+        model.addAttribute("roleSet",
+                new HashSet<>(Arrays.asList(new Role("ROLE_USER"), new Role("ROLE_ADMIN"))));
         return "admin";
     }
 
@@ -49,7 +59,7 @@ public class UsersController {
     @PostMapping("/admin/new")
     public String addUser(@ModelAttribute ("user") User user) {
         userRepository.save(user);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 
     @GetMapping("admin/update/{id}")
@@ -68,7 +78,7 @@ public class UsersController {
     @GetMapping("admin/delete/{id}")
     public String delete(@PathVariable("id") long id) {
         userRepository.deleteById(id);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 }
 

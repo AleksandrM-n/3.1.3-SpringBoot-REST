@@ -1,16 +1,146 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <title>Title</title>
 </head>
-<body>
-<h1>Greetings, ADMIN!</h1>
-<h1>What do you need?</h1>
-<a href="/admin/users">Show and manage all users</a>
-<br>
-<a href="/admin/new">Add new user</a>
-<br>
-<a th:href="@{http://localhost:8080/logout}">Log Out</a>
+<body style="background-color: whitesmoke">
+<header class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <ul class="nav fixed-top justify-content-end justify-content-sm-between" style="background-color: #343A40">
+                <div>
+                    <p class="nav-item px-1 my-2" style="color: aliceblue"
+                       th:text="${email} + ' with roles: ' + ${roles}"></p>
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" style="color: #8097A0" th:href="@{http://localhost:8080/logout}">Log Out</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<section>
+    <div class="row my-4 mx-0 py-3 px-0">
+        <div class="col-2 container-fluid vh-100" style="background-color: white">
+            <br>
+            <a href="/admin/users">Show and manage all users</a>
+            <br>
+            <a href="/admin/new">Add new user</a>
+            <br>
+        </div>
+        <div class="col-10 container-fluid vh-100 pl-4">
+            <div>
+                <h1 class="py-3" style="color: black">Admin panel</h1>
+            </div>
+            <div>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="users-tab" data-toggle="tab" href="#users" role="tab"
+                           aria-controls="users" aria-selected="true">Users table</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="new-user" data-toggle="tab" href="#new" role="tab"
+                           aria-controls="new" aria-selected="false">New User</a>
+                    </li>
+                </ul>
+                <div class="container-fluid px-0 border rounded" style="background-color: white">
+                    <div class="tab-content pt-0" id="myTabContent">
+                        <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+                            <div class="border-bottom" style="background-color: whitesmoke">
+                                <h4 class="my-0 pl-3 py-2">All users</h4>
+                            </div>
+                            <div class="px-3 py-2">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Role</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="us : ${users}">
+                                        <td th:text="${us.getId()}"></td>
+                                        <td th:text="${us.getFirstName()}"></td>
+                                        <td th:text="${us.getLastName()}"></td>
+                                        <td th:text="${us.getEmail()}"></td>
+                                        <td th:text="${us.getRoles()}"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">
+                                                Edit
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <a th:href="@{/admin/delete/{id}(id=${us.getId()})}" class="btn btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="new" role="tabpanel" aria-labelledby="users-tab">
+                            <div class="border-bottom" style="background-color: whitesmoke">
+                                <h4 class="my-0 pl-3 py-2">Add new user</h4>
+                            </div>
+                            <div class="row justify-content-center px-5">
+                                <form class="w-50" th:method="POST" th:action="@{/admin/new}" th:object="${user}">
+                                    <div class="col text-center px-5">
+                                        <div class="form-group">
+                                            <label class="mb-0 mt-3" for="firstName" style="font-weight: bold">First name</label>
+                                            <input type="text" class="form-control" style="height: 30px" id="firstName" th:field="*{firstName}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="my-0" for="lastName" style="font-weight: bold">Last name</label>
+                                            <input type="text" class="form-control" style="height: 30px" id="lastName" th:field="*{lastName}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="my-0" for="email" style="font-weight: bold">Email</label>
+                                            <input type="email" class="form-control" style="height: 30px" id="email" th:field="*{email}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="my-0" for="password" style="font-weight: bold">Password</label>
+                                            <input type="password" class="form-control" style="height: 30px" id="password" th:field="*{password}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="my-0" for="roles" style="font-weight: bold">Role</label>
+                                            <select multiple class="form-control" style="height: 55px" id="roles" th:field="*{roles}">
+                                                <option th:each="role : ${roleSet}"
+                                                        th:text="${role.getRole().toString()}"
+                                                        th:value="${role.getRole()}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <input type="submit" class="btn btn-success mb-3" value="Add new user">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
