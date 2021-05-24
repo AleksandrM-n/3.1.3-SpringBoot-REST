@@ -15,20 +15,8 @@ import java.util.Set;
 
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
-    private final UserRepository userRepository;
-
-    public SuccessUserHandler(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        if (roles.contains("ROLE_USER") && !roles.contains("ROLE_ADMIN")) {
-            User user = userRepository.findUserByEmail(authentication.getName());
-            httpServletResponse.sendRedirect("/user/" + user.getId());
-        } else {
-            httpServletResponse.sendRedirect("/admin");
-        }
+        httpServletResponse.sendRedirect("/");
     }
 }
