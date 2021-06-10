@@ -10,16 +10,16 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class TestController {
+public class StartController {
     private final UserRepository userRepository;
 
-    public TestController (UserRepository userRepository, UserDtoService userDtoService) {
+    public StartController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @GetMapping("/")
     public String asAdminStart(UsernamePasswordAuthenticationToken principal, ModelMap model) {
         model.addAttribute("authUser", userRepository.findUserByEmail(principal.getName()));
-        return "learningPage";
+        return "myAppPage";
     }
 }
