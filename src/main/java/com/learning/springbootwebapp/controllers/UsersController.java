@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 
 @Controller
+@RequestMapping("/off/")
 public class UsersController {
     private final UserRepository userRepository;
     private final UserDtoService userDtoService;
